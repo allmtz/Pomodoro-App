@@ -2,7 +2,25 @@
 module.exports = {
   content: ["./src/**/*.{html,js,tsx}"],
   theme: {
-    extend: {},
+    fontFamily:{
+      "kumbh":['Kumbh Sans', 'sans-serif'],
+      "roboto":['Roboto Slab', 'serif'],
+      "space":['Space Mono', 'monospace'],
+    },
+    extend: {
+      colors:{
+        'light-purple': '#D7E0FF',
+        'default-bg': '#1e213f',
+        'dark-bg': '#161932',
+        'hl': '#f87070',
+        'off-white': '#EFF1FA',
+        'teal': '#70f3f8',
+        'violet': '#d881f8',
+        },
+        boxShadow:{
+          'custom': '0 0 0 20px #242851e9'
+        },
+    },
   },
   plugins: [],
 }
