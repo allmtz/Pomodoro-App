@@ -37,24 +37,44 @@ function App() {
 
   const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
 
-  const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
-  // const [secondsRemaining, setSecondsRemaining] = useState( 10 )
+  // const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
+  const [secondsRemaining, setSecondsRemaining] = useState( 2 )
 
   const [status, setStatus] = useState(STATUS.STOPPED)
   const intervalRef= useRef(0)
 
+  const [mode, setMode] = useState("pomodoro")
+
+  useEffect( () => {
+    setSecondsRemaining(settings.pomoLength * 60)
+    setMode("pomodoro")
+  },[settings])
+
   function startPomo(){
     if(status === STATUS.STOPPED){
       setStatus(STATUS.STARTED)
-      intervalRef.current =  setInterval(() => {
+      intervalRef.current =  setInterval( () => {
           setSecondsRemaining( secondsRemaining => {
             if(secondsRemaining > 0){
               return secondsRemaining - 1
               }
           else{
+            alert("Times up!")
             clearInterval(intervalRef.current)
             setStatus(STATUS.STOPPED)
-            return 0
+
+            if(mode === "pomodoro"){
+              setMode("short break")
+              return settings.shortBreak * 60
+            }
+            else if(mode === "short break"){
+              setMode("long break")
+              return settings.longBreak * 60
+            }
+            else{
+              setMode("pomodoro")
+              return settings.pomoLength * 60
+            }
           }
           })
       },1000)
@@ -79,7 +99,6 @@ function App() {
 
   function handleSubmit(e:React.FormEvent){
     e.preventDefault()
-    console.log("fired")
 
     if(pomodoroRef.current && shortBreakRef.current && longBreakRef.current){
       setSettings(
@@ -92,6 +111,7 @@ function App() {
         }
       )
     }
+    closeSettings()
   }
   return (  
     <>
@@ -99,9 +119,9 @@ function App() {
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around w-[400px] p-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full '>
-            <li className={focus === "pomodoro" ? focusedStyling : ""}>pomodoro</li>
-            <li className={focus === "short break" ? focusedStyling : ""}>short break</li>
-            <li className={focus === "long break" ? focusedStyling : ""}>long break</li>
+            <li className={mode === "pomodoro" ? focusedStyling : ""}>pomodoro</li>
+            <li className={mode === "short break" ? focusedStyling : ""}>short break</li>
+            <li className={mode === "long break" ? focusedStyling : ""}>long break</li>
           </ul>
         </nav>
 
