@@ -1,10 +1,24 @@
-import  { useRef, useState } from 'react'
+import  React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { ProgressBar } from './ProgressBar'
 
 // let focus = "short break"
 let focus = "pomodoro"
 
+const STATUS = {
+  STARTED: "started",
+  STOPPED: "stopped"
+}
+
+function getMinutes(seconds : number){
+  const stringMins = String(seconds / 60).split(".")
+  return stringMins[0]
+}
+
+function getSeconds(seconds : number){
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+  return String(seconds % 60).padStart(2,"0")
+}
 
 function App() {
   const pomodoroRef = useRef<HTMLSelectElement>(null)
@@ -14,14 +28,42 @@ function App() {
   const colorRef = useRef("hl")
   const settingsRef = useRef<HTMLDivElement>(null)
   const [settings, setSettings] = useState({
-    pomodoro:25,
+    pomoLength:25,
     shortBreak:5,
     longBreak:30,
     font:"kumbh",
     color:"hl"
   })
 
-const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
+  const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
+
+  const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
+  // const [secondsRemaining, setSecondsRemaining] = useState( 10 )
+
+  const [status, setStatus] = useState(STATUS.STOPPED)
+  const intervalRef= useRef(0)
+
+  function startPomo(){
+    if(status === STATUS.STOPPED){
+      setStatus(STATUS.STARTED)
+      intervalRef.current =  setInterval(() => {
+          setSecondsRemaining( secondsRemaining => {
+            if(secondsRemaining > 0){
+              return secondsRemaining - 1
+              }
+          else{
+            clearInterval(intervalRef.current)
+            setStatus(STATUS.STOPPED)
+            return 0
+          }
+          })
+      },1000)
+    }
+    else{
+      setStatus(STATUS.STOPPED)
+      clearInterval(intervalRef.current)
+    }
+  }
 
   function openSettings(){
     if(settingsRef.current){
@@ -42,7 +84,7 @@ const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
     if(pomodoroRef.current && shortBreakRef.current && longBreakRef.current){
       setSettings(
         {
-          pomodoro: parseInt(pomodoroRef.current.value),
+          pomoLength: parseInt(pomodoroRef.current.value),
           shortBreak: parseInt(shortBreakRef.current.value),
           longBreak: parseInt(longBreakRef.current.value),
           font: fontRef.current,
@@ -51,8 +93,7 @@ const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
       )
     }
   }
-
-  return (
+  return (  
     <>
       <div className={`container font-${fontRef.current} flex flex-col justify-center align-center gap-10`}>
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
@@ -64,11 +105,13 @@ const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
           </ul>
         </nav>
 
-        <main className={`font-${fontRef.current} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto`}>
+        <main className={`font-${fontRef.current} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
+        onClick={startPomo}>
           {/* <progress className='bg-hl' max="10" value="5" ></progress> */}
-          
-          <p className='text-7xl font-bold'>17:59</p>
-          <p className='text-2xl tracking-[6px]'>PAUSE</p>
+          <p className='text-7xl font-bold'>
+            {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
+          </p>
+          <p className='text-2xl tracking-[6px]'>{status === "started" ? "PAUSE" : "START"}</p>
         </main>
 
         <footer className='mx-auto my-16 cursor-pointer'>
