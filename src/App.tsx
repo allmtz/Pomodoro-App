@@ -42,7 +42,7 @@ function App() {
   }
        )
 
-  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg`
+  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg cursor-pointer`
   const [selectedFont, setSelectedFont] = useState("kombh")
   const selectedFontStyling = `text-white bg-black`
   const [selectedColor, setSelectedColor] = useState("hl")
@@ -110,6 +110,13 @@ function App() {
     }
   }
 
+  function manuallyChangeMode(newMode:string,settingsName:string){
+    clearInterval(intervalRef.current)
+    setStatus(STATUS.STOPPED)
+    setSecondsRemaining(settings[settingsName] * 60)
+    setMode(newMode)
+  }
+
   function handleSubmit(e:React.FormEvent){
     e.preventDefault()
 
@@ -132,9 +139,15 @@ function App() {
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
-            <li className={mode === "pomodoro" ? focusedStyling : ""}>pomodoro</li>
-            <li className={mode === "short break" ? focusedStyling : ""}>short break</li>
-            <li className={mode === "long break" ? focusedStyling : ""}>long break</li>
+            <li className={mode === "pomodoro" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("pomodoro","pomoLength")}
+            >pomodoro</li>
+            <li className={mode === "short break" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("short break","shortBreak")}
+            >short break</li>
+            <li className={mode === "long break" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("long break","longBreak")}
+            >long break</li>
           </ul>
         </nav>
 
@@ -144,7 +157,7 @@ function App() {
           <p className='text-7xl font-bold'>
             {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
           </p>
-          <p className='text-2xl tracking-[6px]'>{status === "started" ? "PAUSE" : "START"}</p>
+          <p className='text-2xl tracking-[6px] mt-4'>{status === "started" ? "PAUSE" : "START"}</p>
         </main>
 
         <footer className='mx-auto my-16 cursor-pointer'>
