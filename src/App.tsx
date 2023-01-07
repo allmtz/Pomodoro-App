@@ -2,9 +2,6 @@ import  React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { ProgressBar } from './ProgressBar'
 
-// let focus = "short break"
-let focus = "pomodoro"
-
 const STATUS = {
   STARTED: "started",
   STOPPED: "stopped"
@@ -36,6 +33,9 @@ function App() {
   })
 
   const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
+  const [selectedFont, setSelectedFont] = useState("kombh")
+  const selectedFontStyling = `text-white bg-black`
+  const [selectedColor, setSelectedColor] = useState("hl")
 
   // const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
   const [secondsRemaining, setSecondsRemaining] = useState( 2 )
@@ -118,7 +118,7 @@ function App() {
       <div className={`container font-${fontRef.current} flex flex-col justify-center align-center gap-10`}>
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
-          <ul className='flex items-center justify-around w-[400px] p-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full '>
+          <ul className='flex items-center justify-around  p-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
             <li className={mode === "pomodoro" ? focusedStyling : ""}>pomodoro</li>
             <li className={mode === "short break" ? focusedStyling : ""}>short break</li>
             <li className={mode === "long break" ? focusedStyling : ""}>long break</li>
@@ -151,7 +151,7 @@ function App() {
           <form action="" className="flex flex-col gap-5"
             onSubmit={e => handleSubmit(e)}>
 
-            <div className="flex justify-around">
+            <div className="flex justify-between">
               <p className='text-gray-400'>pomodoro</p>
               <select ref={pomodoroRef} name="pomodoro-length" className='bg-off-white pr-16 pl-2 py-1 rounded-md border' >
                 <option value="25">25</option>
@@ -162,7 +162,7 @@ function App() {
               </select>
             </div>
 
-          <div className="flex justify-around">
+          <div className="flex justify-between">
             <p className='text-gray-400'>short break</p>
             <select ref={shortBreakRef} name="short-break" className='bg-off-white pr-16 pl-2 py-1 rounded-md border'>
               <option value="5">5</option>
@@ -174,7 +174,7 @@ function App() {
             </select>
           </div>
 
-          <div className="flex justify-around">
+          <div className="flex justify-between">
             <p className='text-gray-400'>long break</p>
             <select ref={longBreakRef} name="long-break" className='bg-off-white pr-16 pl-2 py-1 rounded-md border'>
               <option value="30">30</option>
@@ -190,9 +190,9 @@ function App() {
           <div className='border-t-2 mt-4'>
             <p className='text-center my-5 tracking-widest'>FONT</p>
             <div className='flex justify-center gap-5'>
-              <p onClick={() => fontRef.current="kumbh"} className='bg-black text-white p-2 rounded-full cursor-pointer'>Aa</p>
-              <p onClick={() => fontRef.current="roboto"}  className='bg-off-white font-roboto font-thin p-2 rounded-full border cursor-pointer'>Aa</p>
-              <p onClick={() => fontRef.current="space"}  className='bg-off-white font-space p-2 rounded-full border cursor-pointer'>Aa</p>
+              <p onClick={() => {setSelectedFont("kumbh"); fontRef.current="kumbh"}} className={`${selectedFont === "kumbh" ? selectedFontStyling :   "bg-off-white"} p-2 rounded-full w-10 text-center cursor-pointer`}>Aa</p>
+              <p onClick={() => {setSelectedFont("roboto"); fontRef.current="roboto"}}  className={`${selectedFont === "roboto" ? selectedFontStyling :   "bg-off-white"} font-roboto p-2 w-10 text-center rounded-full cursor-pointer`}>Aa</p>
+              <p onClick={() => {setSelectedFont("space"); fontRef.current="space"}}  className={`${selectedFont === "space" ? selectedFontStyling :   "bg-off-white"} font-space p-2 w-10 text-center rounded-full cursor-pointer`}>Aa</p>
             </div>
           </div>
 
@@ -200,23 +200,23 @@ function App() {
             <p className='text-center my-5 tracking-widest'>COLOR</p>
             <div className='flex justify-center gap-5'>
               <div className='bg-hl w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-                onClick={() => colorRef.current="hl"}>
-                X
+                onClick={() =>{setSelectedColor("hl"); colorRef.current="hl"}}
+              >
+                {selectedColor==="hl" ? "X" : "" }
               </div>
               <div className='bg-teal w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-              onClick={() => colorRef.current="teal"}
+                onClick={() =>{setSelectedColor("teal"); colorRef.current="teal"}}
               >
-                X
+                {selectedColor==="teal" ? "X" : "" }
               </div>
               <div className='bg-violet w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-                onClick={() => colorRef.current="violet"}
+                onClick={() =>{setSelectedColor("violet"); colorRef.current="violet"}}
               >
-                X
+                {selectedColor==="violet" ? "X" : "" }
               </div>
             </div>
           </div>
-
-          <input type="submit" className={`bg-hl w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white`}
+          <input type="submit" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white`}
           />
         </form>
        </div>
