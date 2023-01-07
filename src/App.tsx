@@ -24,13 +24,23 @@ function App() {
   const fontRef = useRef("kumbh")
   const colorRef = useRef("hl")
   const settingsRef = useRef<HTMLDivElement>(null)
-  const [settings, setSettings] = useState({
-    pomoLength:25,
-    shortBreak:5,
-    longBreak:30,
-    font:"kumbh",
-    color:"hl"
-  })
+  const [settings, setSettings] = useState( () => {
+    if(localStorage.getItem("settings")){
+      const localSettings =  JSON.parse(localStorage.getItem("settings") || "")
+      fontRef.current = localSettings.font
+      colorRef.current = localSettings.color
+
+      return localSettings
+    }
+    return{
+        pomoLength:0.05,
+        shortBreak:0.05,
+        longBreak:0.05,
+        font:"kumbh",
+        color:"hl"
+      }
+  }
+       )
 
   const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
   const [selectedFont, setSelectedFont] = useState("kombh")
@@ -48,6 +58,7 @@ function App() {
   useEffect( () => {
     setSecondsRemaining(settings.pomoLength * 60)
     setMode("pomodoro")
+    localStorage.setItem("settings",JSON.stringify(settings))
   },[settings])
 
   function startPomo(){
@@ -88,6 +99,8 @@ function App() {
   function openSettings(){
     if(settingsRef.current){
       settingsRef.current.style.display = "block"
+      fontRef.current = settings.font
+      colorRef.current = settings.color
     }
   }
 
@@ -118,7 +131,7 @@ function App() {
       <div className={`container font-${fontRef.current} flex flex-col justify-center align-center gap-10`}>
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
-          <ul className='flex items-center justify-around  p-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
+          <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
             <li className={mode === "pomodoro" ? focusedStyling : ""}>pomodoro</li>
             <li className={mode === "short break" ? focusedStyling : ""}>short break</li>
             <li className={mode === "long break" ? focusedStyling : ""}>long break</li>
@@ -168,22 +181,17 @@ function App() {
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="25">25</option>
-              <option value="30">30</option>
             </select>
           </div>
 
           <div className="flex justify-between">
             <p className='text-gray-400'>long break</p>
             <select ref={longBreakRef} name="long-break" className='bg-off-white pr-16 pl-2 py-1 rounded-md border'>
+              <option value="20">20</option>
+              <option value="25">25</option>
               <option value="30">30</option>
               <option value="35">35</option>
               <option value="40">40</option>
-              <option value="45">45</option>
-              <option value="50">50</option>
-              <option value="55">55</option>
-              <option value="60">60</option>
             </select>
           </div>
 
