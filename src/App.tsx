@@ -42,7 +42,7 @@ function App() {
   }
        )
 
-  const focusedStyling = `bg-${colorRef.current} p-4 rounded-full text-dark-bg`
+  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg`
   const [selectedFont, setSelectedFont] = useState("kombh")
   const selectedFontStyling = `text-white bg-black`
   const [selectedColor, setSelectedColor] = useState("hl")
@@ -99,8 +99,8 @@ function App() {
   function openSettings(){
     if(settingsRef.current){
       settingsRef.current.style.display = "block"
-      fontRef.current = settings.font
-      colorRef.current = settings.color
+      setSelectedFont(settings.font)
+      setSelectedColor(settings.color)
     }
   }
 
@@ -128,7 +128,7 @@ function App() {
   }
   return (  
     <>
-      <div className={`container font-${fontRef.current} flex flex-col justify-center align-center gap-10`}>
+      <div className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}>
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
@@ -138,7 +138,7 @@ function App() {
           </ul>
         </nav>
 
-        <main className={`font-${fontRef.current} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
+        <main className={`font-${settings.font} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
         onClick={startPomo}>
           {/* <progress className='bg-hl' max="10" value="5" ></progress> */}
           <p className='text-7xl font-bold'>
