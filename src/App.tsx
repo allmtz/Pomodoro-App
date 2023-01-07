@@ -152,9 +152,9 @@ function App() {
         </footer>
       </div>
 
-      <div ref={settingsRef} className={`FULLPAGE hidden font-${fontRef.current}  w-full h-full absolute top-0 right-0 p-4 bg-grayed-out`}>
+      <div ref={settingsRef} className={`FULLPAGE hidden font-${fontRef.current}  w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}>
        
-       <div className="SETTINGS-CARD w-[350px] mx-auto p-4 bg-orange-300">
+       <div className="SETTINGS-CARD max-w-[350px]  mx-auto p-4 bg-orange-300">
           <div className='border-b-2 flex justify-between pb-4'>
             <p className='text-xl' >Settings</p>
             <p className='text-slate-400 font-extralight cursor-pointer' onClick={closeSettings}>X</p>
