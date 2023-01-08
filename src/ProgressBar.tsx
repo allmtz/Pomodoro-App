@@ -1,8 +1,13 @@
-
 import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { ISettings } from './App';
 
-export const ProgressBar = ({percentLeft, settings}) => {
+interface IProgressProps{
+    percentLeft:number,
+    settings:ISettings
+}
+
+export const ProgressBar = ({percentLeft, settings}:IProgressProps) => {
     return(
     <div className='absolute w-[280px] h-[280px]'>
         <CircularProgressbar value={percentLeft} strokeWidth={3} styles={buildStyles({

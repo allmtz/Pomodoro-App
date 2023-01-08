@@ -2,6 +2,14 @@ import  React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { ProgressBar } from './ProgressBar'
 
+export interface ISettings{
+        pomoLength:number,
+        shortBreak:number,
+        longBreak:number,
+        font:string,
+        color:string
+}
+
 const STATUS = {
   STARTED: "started",
   STOPPED: "stopped"
