@@ -46,6 +46,7 @@ function App() {
   const [selectedFont, setSelectedFont] = useState("kombh")
   const selectedFontStyling = `text-white bg-black`
   const [selectedColor, setSelectedColor] = useState("hl")
+  const [percentLeft, setPercentLeft] = useState(100)
 
   // const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
   const [secondsRemaining, setSecondsRemaining] = useState( 2 )
@@ -53,11 +54,11 @@ function App() {
   const [status, setStatus] = useState(STATUS.STOPPED)
   const intervalRef= useRef(0)
 
-  const [mode, setMode] = useState("pomodoro")
+  const [mode, setMode] = useState("pomoLength")
 
   useEffect( () => {
     setSecondsRemaining(settings.pomoLength * 60)
-    setMode("pomodoro")
+    setMode("pomoLength")
     localStorage.setItem("settings",JSON.stringify(settings))
   },[settings])
 
@@ -67,6 +68,7 @@ function App() {
       intervalRef.current =  setInterval( () => {
           setSecondsRemaining( secondsRemaining => {
             if(secondsRemaining > 0){
+              setPercentLeft( (((secondsRemaining - 1) / 60) / settings[mode]) * 100 )
               return secondsRemaining - 1
               }
           else{
@@ -74,21 +76,21 @@ function App() {
             clearInterval(intervalRef.current)
             setStatus(STATUS.STOPPED)
 
-            if(mode === "pomodoro"){
-              setMode("short break")
+            if(mode === "pomoLength"){
+              setMode("shortBreak")
               return settings.shortBreak * 60
             }
-            else if(mode === "short break"){
-              setMode("long break")
+            else if(mode === "shortBreak"){
+              setMode("longBreak")
               return settings.longBreak * 60
             }
             else{
-              setMode("pomodoro")
+              setMode("pomoLength")
               return settings.pomoLength * 60
             }
           }
           })
-      },1000)
+      },700)
     }
     else{
       setStatus(STATUS.STOPPED)
@@ -139,21 +141,22 @@ function App() {
         <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
-            <li className={mode === "pomodoro" ? focusedStyling : "cursor-pointer"}
-              onClick={()=>manuallyChangeMode("pomodoro","pomoLength")}
+            <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("pomoLength","pomoLength")}
             >pomodoro</li>
-            <li className={mode === "short break" ? focusedStyling : "cursor-pointer"}
-              onClick={()=>manuallyChangeMode("short break","shortBreak")}
+            <li className={mode === "shortBreak" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("shortBreak","shortBreak")}
             >short break</li>
-            <li className={mode === "long break" ? focusedStyling : "cursor-pointer"}
-              onClick={()=>manuallyChangeMode("long break","longBreak")}
+            <li className={mode === "longBreak" ? focusedStyling : "cursor-pointer"}
+              onClick={()=>manuallyChangeMode("longBreak","longBreak")}
             >long break</li>
           </ul>
         </nav>
 
-        <main className={`font-${settings.font} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
+        <main className={`relative font-${settings.font} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
         onClick={startPomo}>
           {/* <progress className='bg-hl' max="10" value="5" ></progress> */}
+         <ProgressBar percentLeft={percentLeft} settings={settings} />
           <p className='text-7xl font-bold'>
             {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
           </p>

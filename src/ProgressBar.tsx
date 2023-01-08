@@ -1,12 +1,18 @@
-export const ProgressBar = () => {
+
+import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
+export const ProgressBar = ({percentLeft, settings}) => {
     return(
-    <>
-    <div className="my-10 w-[200px] h-[200px] bg-blue-800 rounded-full flex items-center justify-center">
-        <div className="w-[10px] h-[100px] bg-hl origin-[50% 100%] rotate-45"> </div>
+    <div className='absolute w-[280px] h-[280px]'>
+        <CircularProgressbar value={percentLeft} strokeWidth={3} styles={buildStyles({
+            pathColor:`${
+                settings.color === "hl" ? "#f87070"
+                : settings.color === "teal" ? "#70f3f8"
+                : "#d881f8"
+            }`,
+            trailColor: `#161932`
+        })} />
     </div>
-    
-    
-    
-    </>
     )
 }
