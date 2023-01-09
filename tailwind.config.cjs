@@ -12,6 +12,7 @@ module.exports = {
         'light-purple': '#D7E0FF',
         'default-bg': '#1e213f',
         'dark-bg': '#161932',
+        'lighter-bg': '#212650',
         'hl': '#f87070',
         'off-white': '#EFF1FA',
         'teal': '#70f3f8',
