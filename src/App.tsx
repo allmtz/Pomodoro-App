@@ -182,11 +182,11 @@ function App() {
        <div className="SETTINGS-CARD max-w-[350px]  mx-auto p-4 bg-orange-300">
           <div className='border-b-2 flex justify-between pb-4'>
             <p className='text-xl' >Settings</p>
-            <p className='text-slate-400 font-extralight cursor-pointer' onClick={closeSettings}>X</p>
+            <p className='text-white cursor-pointer' onClick={closeSettings}>X</p>
           </div>
         
           <p className='text-center my-5 tracking-widest'>TIME (MINUTES)</p>
-          <form action="" className="flex flex-col gap-5"
+          <form className="flex flex-col gap-5"
             onSubmit={e => handleSubmit(e)}>
 
             <div className="flex justify-between">
