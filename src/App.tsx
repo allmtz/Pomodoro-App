@@ -249,7 +249,7 @@ function App() {
               </div>
             </div>
           </div>
-          <input type="submit" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white`}
+          <input  type="submit" value="Apply" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white hover:bg-hl-light`}
           />
         </form>
        </div>
