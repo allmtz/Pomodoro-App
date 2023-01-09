@@ -161,14 +161,15 @@ function App() {
           </ul>
         </nav>
 
-        <main className={`relative font-${settings.font} flex flex-col justify-center items-center text-off-white bg-dark-bg w-[300px] h-[300px] rounded-full shadow-custom m-auto cursor-pointer`}
+        <main className={`relative font-${settings.font} flex justify-center items-center text-off-white  w-[340px] h-[340px] rounded-full  m-auto cursor-pointer bg-gradient-to-br from-dark-bg to-lighter-bg shadow-2xl`}
         onClick={startPomo}>
-          {/* <progress className='bg-hl' max="10" value="5" ></progress> */}
-         <ProgressBar percentLeft={percentLeft} settings={settings} />
-          <p className='text-7xl font-bold'>
-            {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
-          </p>
-          <p className='text-2xl tracking-[6px] mt-4'>{status === "started" ? "PAUSE" : "START"}</p>
+          <div className="flex flex-col justify-center rounded-full bg-dark-bg items-center h-[305px] w-[305px]">
+            <ProgressBar percentLeft={percentLeft} settings={settings} />
+            <p className='text-7xl font-bold'>
+              {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
+            </p>
+            <p className='text-2xl tracking-[6px] mt-4'>{status === "started" ? "PAUSE" : "START"}</p>
+          </div>
         </main>
 
         <footer className='mx-auto my-16 cursor-pointer'>
