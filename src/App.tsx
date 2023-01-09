@@ -173,7 +173,7 @@ function App() {
         </main>
 
         <footer className='mx-auto my-16 cursor-pointer'>
-          <img onClick={openSettings} src="src/assets/icon-settings.svg" alt="" />
+          <img onClick={openSettings} src="/assets/icon-settings.svg" alt="" />
         </footer>
       </div>
 
