@@ -146,7 +146,7 @@ function App() {
   return (  
     <>
       <div className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}>
-        <h1 className='text-light-purple text-4xl m-auto'>pomodoro</h1>
+        <h1 className='text-light-purple text-4xl m-auto mt-5'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
             <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer"}
