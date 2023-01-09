@@ -14,6 +14,7 @@ module.exports = {
         'dark-bg': '#161932',
         'lighter-bg': '#212650',
         'hl': '#f87070',
+        'hl-light': '#f98585',
         'off-white': '#EFF1FA',
         'teal': '#70f3f8',
         'violet': '#d881f8',
