@@ -19,8 +19,8 @@ module.exports = {
         'teal': '#70f3f8',
         'violet': '#d881f8',
         'grayed-out': 'rgba(20, 20, 20, 0.79)',
-        },
-        boxShadow:{
+      },
+      boxShadow:{
           'custom': '0 0 0 20px #242851e9'
         },
     },
