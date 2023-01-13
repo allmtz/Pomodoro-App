@@ -86,20 +86,24 @@ function App() {
 
             if(mode === "pomoLength"){
               setMode("shortBreak")
+              setPercentLeft(100)
               return settings.shortBreak * 60
             }
             else if(mode === "shortBreak"){
               setMode("longBreak")
+              setPercentLeft(100)
               return settings.longBreak * 60
             }
             else{
               setMode("pomoLength")
+              setPercentLeft(100)
               return settings.pomoLength * 60
             }
           }
           })
-      },700)
+      },400)
     }
+    //pausing the timer
     else{
       setStatus(STATUS.STOPPED)
       clearInterval(intervalRef.current)
@@ -125,6 +129,7 @@ function App() {
     setStatus(STATUS.STOPPED)
     setSecondsRemaining(settings[settingsName] * 60)
     setMode(newMode)
+    setPercentLeft(100)
   }
 
   function handleSubmit(e:React.FormEvent){
