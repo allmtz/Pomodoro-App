@@ -50,7 +50,7 @@ function App() {
   }
        )
 
-  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg cursor-pointer duration-700`
+  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg text-center cursor-pointer duration-700`
   const [selectedFont, setSelectedFont] = useState("kombh")
   const selectedFontStyling = `text-white bg-black`
   const [selectedColor, setSelectedColor] = useState("hl")
@@ -152,15 +152,15 @@ function App() {
     <>
       <div className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}>
         <h1 className='text-light-purple text-4xl m-auto mt-5 xl:text-5xl'>pomodoro</h1>
-        <nav className='flex'>
+        <nav className='flex max-sm:text-xs'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full m-auto xl:scale-110'>
-            <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer p-4 "}
+            <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer p-4 text-center"}
               onClick={()=>manuallyChangeMode("pomoLength","pomoLength")}
             >pomodoro</li>
-            <li className={mode === "shortBreak" ? focusedStyling : "cursor-pointer p-4 "}
+            <li className={mode === "shortBreak" ? focusedStyling : "cursor-pointer p-4 text-center"}
               onClick={()=>manuallyChangeMode("shortBreak","shortBreak")}
             >short break</li>
-            <li className={mode === "longBreak" ? focusedStyling : "cursor-pointer p-4 "}
+            <li className={mode === "longBreak" ? focusedStyling : "cursor-pointer p-4  text-center"}
               onClick={()=>manuallyChangeMode("longBreak","longBreak")}
             >long break</li>
           </ul>
@@ -186,7 +186,7 @@ function App() {
 
       <div ref={settingsRef} className={`FULLPAGE hidden font-${fontRef.current}  w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}>
        
-       <div className="SETTINGS-CARD max-w-[350px]  mx-auto p-4 bg-white rounded-2xl">
+       <div className="SETTINGS-CARD max-w-[350px] mx-auto p-4 bg-white rounded-2xl">
           <div className='border-b-2 flex justify-between pb-4'>
             <p className='text-xl' >Settings</p>
             <p className='cursor-pointer' onClick={closeSettings}>X</p>
