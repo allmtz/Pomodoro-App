@@ -1,7 +1,7 @@
 import  React, { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { ProgressBar } from './ProgressBar'
 import { Nav } from './components/Nav'
+import { Timer } from './components/Timer'
 
 export interface ISettings{
         pomoLength:number,
@@ -14,16 +14,6 @@ export interface ISettings{
 const STATUS = {
   STARTED: "started",
   STOPPED: "stopped"
-}
-
-function getMinutes(seconds : number){
-  const stringMins = String(seconds / 60).split(".")
-  return stringMins[0]
-}
-
-function getSeconds(seconds : number){
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
-  return String(seconds % 60).padStart(2,"0")
 }
 
 function App() {
@@ -64,6 +54,7 @@ function App() {
 
   const [mode, setMode] = useState("pomoLength")
 
+  //reset clock when user changes settings
   useEffect( () => {
     setSecondsRemaining(settings.pomoLength * 60)
     setMode("pomoLength")
@@ -103,7 +94,7 @@ function App() {
           })
       },400)
     }
-    //pausing the timer
+    //pause the timer
     else{
       setStatus(STATUS.STOPPED)
       clearInterval(intervalRef.current)
@@ -154,24 +145,10 @@ function App() {
         <h1 className='text-light-purple text-4xl m-auto mt-5 xl:text-5xl'>pomodoro</h1>
 
         <Nav mode={mode} manuallyChangeMode={manuallyChangeMode} settings={settings} />
-
-       
-
-        <main className={`relative font-${settings.font} flex justify-center items-center text-off-white  
-          w-[340px] h-[340px] rounded-full  m-auto cursor-pointer bg-gradient-to-br from-dark-bg to-lighter-bg shadow-2xl
-          xl:w-[500px] xl:h-[500px]`}
-          onClick={startPomo}>
-          <div className="flex flex-col justify-center rounded-full bg-dark-bg items-center h-[305px] w-[305px] xl:h-[465px] xl:w-[465px]">
-            <ProgressBar percentLeft={percentLeft} settings={settings} />
-            <p className='text-7xl font-bold xl:text-8xl'>
-              {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
-            </p>
-            <p className='text-2xl tracking-[6px] mt-4 xl:text-4xl'>{status === "started" ? "PAUSE" : "START"}</p>
-          </div>
-        </main>
+        <Timer settings={settings} startPomo={startPomo} percentLeft={percentLeft} secondsRemaining={secondsRemaining} status={status} />
 
         <footer className='mx-auto my-16 cursor-pointer'>
-          <img onClick={openSettings} src="./icon-settings.svg" alt="" />
+          <img onClick={openSettings} src="./icon-settings.svg" alt="cogwheel" />
         </footer>
       </div>
 
