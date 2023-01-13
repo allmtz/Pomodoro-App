@@ -14,5 +14,6 @@ body{
     background-repeat: no-repeat;
     height: 100%;
     overscroll-behavior: none;
-
+    background-attachment: fixed;
+    min-width: 320px;
 }
