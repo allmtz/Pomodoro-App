@@ -1,6 +1,6 @@
 import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { ISettings } from './App';
+import { ISettings } from '../App';
 
 interface IProgressProps{
     percentLeft:number,
