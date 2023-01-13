@@ -50,7 +50,7 @@ function App() {
   }
        )
 
-  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg cursor-pointer`
+  const focusedStyling = `bg-${settings.color} p-4 rounded-full text-dark-bg cursor-pointer duration-700`
   const [selectedFont, setSelectedFont] = useState("kombh")
   const selectedFontStyling = `text-white bg-black`
   const [selectedColor, setSelectedColor] = useState("hl")
@@ -149,13 +149,13 @@ function App() {
         <h1 className='text-light-purple text-4xl m-auto mt-5'>pomodoro</h1>
         <nav className='flex'>
           <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
-            <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer"}
+            <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer p-4 "}
               onClick={()=>manuallyChangeMode("pomoLength","pomoLength")}
             >pomodoro</li>
-            <li className={mode === "shortBreak" ? focusedStyling : "cursor-pointer"}
+            <li className={mode === "shortBreak" ? focusedStyling : "cursor-pointer p-4 "}
               onClick={()=>manuallyChangeMode("shortBreak","shortBreak")}
             >short break</li>
-            <li className={mode === "longBreak" ? focusedStyling : "cursor-pointer"}
+            <li className={mode === "longBreak" ? focusedStyling : "cursor-pointer p-4 "}
               onClick={()=>manuallyChangeMode("longBreak","longBreak")}
             >long break</li>
           </ul>
