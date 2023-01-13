@@ -6,11 +6,11 @@ import { SettingsCogwheel } from './components/SettingsCogwheel'
 import { Timer } from './components/Timer'
 
 export interface ISettings{
-        pomoLength:number,
-        shortBreak:number,
-        longBreak:number,
-        font:string,
-        color:string
+    pomoLength:number,
+    shortBreak:number,
+    longBreak:number,
+    font:string,
+    color:string
 }
 
 const STATUS = {
@@ -18,31 +18,30 @@ const STATUS = {
   STOPPED: "stopped"
 }
 
+const defaultSettings = {
+  pomoLength:0.05,
+  shortBreak:0.05,
+  longBreak:0.05,
+  font:"kumbh",
+  color:"hl"
+}
+
 function App() {
   const settingsRef = useRef<HTMLDivElement>(null)
-  const [settings, setSettings] = useState( () => {
-    if(localStorage.getItem("settings")){
-      const localSettings =  JSON.parse(localStorage.getItem("settings") || "")
-      // fontRef.current = localSettings.font
-      // colorRef.current = localSettings.color
-
-      return localSettings
-    }
-    return{
-        pomoLength:0.05,
-        shortBreak:0.05,
-        longBreak:0.05,
-        font:"kumbh",
-        color:"hl"
+  const [settings, setSettings] = useState( () => 
+    {
+      if(localStorage.getItem("settings")){
+        const localSettings =  JSON.parse(localStorage.getItem("settings") || "")
+        return localSettings
       }
-  }
-       )
+      return defaultSettings
+    }
+  )
 
   const [selectedFont, setSelectedFont] = useState("kumbh")
   const [selectedColor, setSelectedColor] = useState("hl")
   const [percentLeft, setPercentLeft] = useState(100)
 
-  // const [secondsRemaining, setSecondsRemaining] = useState(settings.pomoLength * 60)
   const [secondsRemaining, setSecondsRemaining] = useState( 2 )
 
   const [status, setStatus] = useState(STATUS.STOPPED)
@@ -88,7 +87,7 @@ function App() {
             }
           }
           })
-      },400)
+      },1000)
     }
     //pause the timer
     else{
@@ -123,7 +122,7 @@ function App() {
       </div>
       <div ref={settingsRef} className={`FULLPAGE hidden w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}>
         <SettingsCard settingsRef={settingsRef} setSettings={setSettings} selectedFont={selectedFont} setSelectedFont={setSelectedFont} 
-        selectedColor={selectedColor} setSelectedColor={setSelectedColor}    />
+        selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
       </div>
     </>
   )
