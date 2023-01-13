@@ -186,10 +186,10 @@ function App() {
 
       <div ref={settingsRef} className={`FULLPAGE hidden font-${fontRef.current}  w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}>
        
-       <div className="SETTINGS-CARD max-w-[350px]  mx-auto p-4 bg-orange-300">
+       <div className="SETTINGS-CARD max-w-[350px]  mx-auto p-4 bg-white rounded-2xl">
           <div className='border-b-2 flex justify-between pb-4'>
             <p className='text-xl' >Settings</p>
-            <p className='text-white cursor-pointer' onClick={closeSettings}>X</p>
+            <p className='cursor-pointer' onClick={closeSettings}>X</p>
           </div>
         
           <p className='text-center my-5 tracking-widest'>TIME (MINUTES)</p>
@@ -242,21 +242,21 @@ function App() {
               <div className='bg-hl w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
                 onClick={() =>{setSelectedColor("hl"); colorRef.current="hl"}}
               >
-                {selectedColor==="hl" ? "X" : "" }
+                <div className={`${selectedColor==="hl" ? "scale-1" : "scale-0"} duration-200`}>X</div>
               </div>
               <div className='bg-teal w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
                 onClick={() =>{setSelectedColor("teal"); colorRef.current="teal"}}
               >
-                {selectedColor==="teal" ? "X" : "" }
+                <div className={`${selectedColor==="teal" ? "scale-1" : "scale-0"} duration-200`}>X</div>
               </div>
               <div className='bg-violet w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
                 onClick={() =>{setSelectedColor("violet"); colorRef.current="violet"}}
               >
-                {selectedColor==="violet" ? "X" : "" }
+                <div className={`${selectedColor==="violet" ? "scale-1" : "scale-0"} duration-200`}>X</div>
               </div>
             </div>
           </div>
-          <input  type="submit" value="Apply" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white hover:bg-hl-light`}
+          <input  type="submit" value="Apply" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white hover:brightness-90 duration-200`}
           />
         </form>
        </div>
