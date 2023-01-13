@@ -151,9 +151,9 @@ function App() {
   return (  
     <>
       <div className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}>
-        <h1 className='text-light-purple text-4xl m-auto mt-5'>pomodoro</h1>
+        <h1 className='text-light-purple text-4xl m-auto mt-5 xl:text-5xl'>pomodoro</h1>
         <nav className='flex'>
-          <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full'>
+          <ul className='flex items-center justify-around px-4 py-2 gap-9 text-light-purple font-bold bg-dark-bg rounded-full m-auto xl:scale-110'>
             <li className={mode === "pomoLength" ? focusedStyling : "cursor-pointer p-4 "}
               onClick={()=>manuallyChangeMode("pomoLength","pomoLength")}
             >pomodoro</li>
@@ -166,14 +166,16 @@ function App() {
           </ul>
         </nav>
 
-        <main className={`relative font-${settings.font} flex justify-center items-center text-off-white  w-[340px] h-[340px] rounded-full  m-auto cursor-pointer bg-gradient-to-br from-dark-bg to-lighter-bg shadow-2xl`}
-        onClick={startPomo}>
-          <div className="flex flex-col justify-center rounded-full bg-dark-bg items-center h-[305px] w-[305px]">
+        <main className={`relative font-${settings.font} flex justify-center items-center text-off-white  
+          w-[340px] h-[340px] rounded-full  m-auto cursor-pointer bg-gradient-to-br from-dark-bg to-lighter-bg shadow-2xl
+          xl:w-[500px] xl:h-[500px]`}
+          onClick={startPomo}>
+          <div className="flex flex-col justify-center rounded-full bg-dark-bg items-center h-[305px] w-[305px] xl:h-[465px] xl:w-[465px]">
             <ProgressBar percentLeft={percentLeft} settings={settings} />
-            <p className='text-7xl font-bold'>
+            <p className='text-7xl font-bold xl:text-8xl'>
               {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
             </p>
-            <p className='text-2xl tracking-[6px] mt-4'>{status === "started" ? "PAUSE" : "START"}</p>
+            <p className='text-2xl tracking-[6px] mt-4 xl:text-4xl'>{status === "started" ? "PAUSE" : "START"}</p>
           </div>
         </main>
 

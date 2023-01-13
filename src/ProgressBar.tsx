@@ -9,7 +9,7 @@ interface IProgressProps{
 
 export const ProgressBar = ({percentLeft, settings}:IProgressProps) => {
     return(
-    <div className='absolute w-[280px] h-[280px]'>
+    <div className='absolute w-[280px] h-[280px] xl:w-[440px] xl:h-[440px]'>
         <CircularProgressbar value={percentLeft} strokeWidth={3} styles={buildStyles({
             pathColor:`${
                 settings.color === "hl" ? "#f87070"
