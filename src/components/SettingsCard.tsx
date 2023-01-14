@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import { ISettings } from "../App"
+import { ColorOption } from "./ColorOption"
 import { DurationSelector } from "./DurationSelector"
 
 interface ISettingsCardProps{
@@ -68,21 +69,9 @@ export const SettingsCard = ( { settingsRef, setSettings, selectedFont, setSelec
           <div className='border-t-2 mt-4'>
             <p className='text-center my-5 tracking-widest'>COLOR</p>
             <div className='flex justify-center gap-5'>
-              <div className='bg-hl w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-                onClick={() =>{setSelectedColor("hl"); colorRef.current="hl"}}
-              >
-                <div className={`${selectedColor==="hl" ? "scale-1" : "scale-0"} duration-200`}>X</div>
-              </div>
-              <div className='bg-teal w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-                onClick={() =>{setSelectedColor("teal"); colorRef.current="teal"}}
-              >
-                <div className={`${selectedColor==="teal" ? "scale-1" : "scale-0"} duration-200`}>X</div>
-              </div>
-              <div className='bg-violet w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-                onClick={() =>{setSelectedColor("violet"); colorRef.current="violet"}}
-              >
-                <div className={`${selectedColor==="violet" ? "scale-1" : "scale-0"} duration-200`}>X</div>
-              </div>
+              <ColorOption colorRef={colorRef} selectedColor={selectedColor} setSelectedColor={setSelectedColor} color="hl" />
+              <ColorOption colorRef={colorRef} selectedColor={selectedColor} setSelectedColor={setSelectedColor} color="teal" />
+              <ColorOption colorRef={colorRef} selectedColor={selectedColor} setSelectedColor={setSelectedColor} color="violet" />
             </div>
           </div>
           <input  type="submit" value="Apply" className={`bg-${selectedColor} w-min mt-5 -mb-10 mx-auto px-8 py-2 rounded-full cursor-pointer text-white hover:brightness-90 duration-200`}
