@@ -11,7 +11,8 @@ interface ITimer{
 
 function getMinutes(seconds : number){
     const stringMins = String(seconds / 60).split(".")
-    return stringMins[0]
+    return stringMins[0].padStart(2,"0")
+
 }
   
 function getSeconds(seconds : number){
