@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { ISettings } from "../App"
-import { nanoid } from 'nanoid'
+import { DurationSelector } from "./DurationSelector"
 
 interface ISettingsCardProps{
     settingsRef: React.RefObject<HTMLDivElement>,
@@ -12,9 +12,6 @@ interface ISettingsCardProps{
 }
 
 const selectedFontStyling = `text-white bg-black`
-const pomodoroOptions = [25,30,35,45]
-const shortBreakOptions = [5,10,15]
-const longBreakOptions = [20,25,30,35,40]
 
 export const SettingsCard = ( { settingsRef, setSettings, selectedFont, setSelectedFont, selectedColor, setSelectedColor }:ISettingsCardProps ) => {
     const pomodoroRef = useRef<HTMLSelectElement>(null)
@@ -55,30 +52,11 @@ export const SettingsCard = ( { settingsRef, setSettings, selectedFont, setSelec
           <p className='text-center my-5 tracking-widest'>TIME (MINUTES)</p>
           <form className="flex flex-col gap-5"
             onSubmit={e => handleSubmit(e)}>
-            <div className="flex justify-between">
-              <p className='text-gray-400'>pomodoro</p>
-              <select ref={pomodoroRef} name="pomodoro-length" className='bg-off-white pr-16 pl-2 py-1 rounded-md border' >
-                {pomodoroOptions.map( duration =>
-                    <option key={nanoid()} value={duration}>{duration}</option>
-                )}
-              </select>
-            </div>
-            <div className="flex justify-between">
-                <p className='text-gray-400'>short break</p>
-                <select ref={shortBreakRef} name="short-break" className='bg-off-white pr-16 pl-2 py-1 rounded-md border'>
-                {shortBreakOptions.map( duration =>
-                    <option key={nanoid()} value={duration}>{duration}</option>
-                    )}
-                </select>
-            </div>
-            <div className="flex justify-between">
-                <p className='text-gray-400'>long break</p>
-                <select ref={longBreakRef} name="long-break" className='bg-off-white pr-16 pl-2 py-1 rounded-md border'>
-                    {longBreakOptions.map( duration =>
-                        <option key={nanoid()} value={duration}>{duration}</option>
-                    )}    
-                </select>
-            </div>
+
+            <DurationSelector mode={"pomodoro"} options={ [25,30,35,40,45] } ref={pomodoroRef} />
+            <DurationSelector mode={"short break"} options={ [5,10,15] } ref={shortBreakRef} />
+            <DurationSelector mode={"long break"} options={ [20,25,30,35,40] } ref={longBreakRef} />
+
           <div className='border-t-2 mt-4'>
             <p className='text-center my-5 tracking-widest'>FONT</p>
             <div className='flex justify-center gap-5'>
