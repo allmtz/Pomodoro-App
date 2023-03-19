@@ -1,131 +1,151 @@
-import  React, { useEffect, useRef, useState } from 'react'
-import './App.css'
-import { Nav } from './components/Nav'
-import { SettingsCard } from './components/SettingsCard'
-import { SettingsCogwheel } from './components/SettingsCogwheel'
-import { Timer } from './components/Timer'
+import React, { useEffect, useRef, useState } from "react";
+import "./App.css";
+import { Nav } from "./components/Nav";
+import { SettingsCard } from "./components/SettingsCard";
+import { SettingsCogwheel } from "./components/SettingsCogwheel";
+import { Timer } from "./components/Timer";
 
-export interface ISettings{
-    pomoLength:number,
-    shortBreak:number,
-    longBreak:number,
-    font:string,
-    color:string
+export interface ISettings {
+  pomoLength: number;
+  shortBreak: number;
+  longBreak: number;
+  font: string;
+  color: string;
 }
 
 const STATUS = {
   STARTED: "started",
-  STOPPED: "stopped"
-}
+  STOPPED: "stopped",
+};
 
 const defaultSettings = {
-  pomoLength:0.05,
-  shortBreak:0.05,
-  longBreak:0.05,
-  font:"kumbh",
-  color:"hl"
-}
+  pomoLength: 0.05,
+  shortBreak: 0.05,
+  longBreak: 0.05,
+  font: "kumbh",
+  color: "hl",
+};
 
 function App() {
-  const settingsRef = useRef<HTMLDivElement>(null)
-  const [settings, setSettings] = useState( () => 
-    {
-      if(localStorage.getItem("settings")){
-        const localSettings =  JSON.parse(localStorage.getItem("settings") || "")
-        return localSettings
-      }
-      return defaultSettings
+  const settingsRef = useRef<HTMLDivElement>(null);
+  const [settings, setSettings] = useState(() => {
+    if (localStorage.getItem("settings")) {
+      const localSettings = JSON.parse(localStorage.getItem("settings") || "");
+      return localSettings;
     }
-  )
+    return defaultSettings;
+  });
 
-  const [selectedFont, setSelectedFont] = useState("kumbh")
-  const [selectedColor, setSelectedColor] = useState("hl")
-  const [percentLeft, setPercentLeft] = useState(100)
+  const [selectedFont, setSelectedFont] = useState("kumbh");
+  const [selectedColor, setSelectedColor] = useState("hl");
+  const [percentLeft, setPercentLeft] = useState(100);
 
-  const [secondsRemaining, setSecondsRemaining] = useState( 2 )
+  const [secondsRemaining, setSecondsRemaining] = useState(2);
 
-  const [status, setStatus] = useState(STATUS.STOPPED)
-  const intervalRef= useRef(0)
+  const [status, setStatus] = useState(STATUS.STOPPED);
+  const intervalRef = useRef(0);
 
-  const [mode, setMode] = useState("pomoLength")
+  const [mode, setMode] = useState("pomoLength");
 
   //reset clock when user changes settings
-  useEffect( () => {
-    setSecondsRemaining(settings.pomoLength * 60)
-    setMode("pomoLength")
-    localStorage.setItem("settings",JSON.stringify(settings))
-  },[settings])
+  useEffect(() => {
+    setSecondsRemaining(settings.pomoLength * 60);
+    setMode("pomoLength");
+    localStorage.setItem("settings", JSON.stringify(settings));
+  }, [settings]);
 
-  function startPomo(){
-    if(status === STATUS.STOPPED){
-      setStatus(STATUS.STARTED)
-      intervalRef.current =  setInterval( () => {
-          setSecondsRemaining( secondsRemaining => {
-            if(secondsRemaining > 0){
-              setPercentLeft( (((secondsRemaining - 1) / 60) / settings[mode]) * 100 )
-              return secondsRemaining - 1
-              }
-          else{
-            alert("Times up!")
-            clearInterval(intervalRef.current)
-            setStatus(STATUS.STOPPED)
+  function startPomo() {
+    if (status === STATUS.STOPPED) {
+      setStatus(STATUS.STARTED);
+      intervalRef.current = setInterval(() => {
+        setSecondsRemaining((secondsRemaining) => {
+          if (secondsRemaining > 0) {
+            setPercentLeft(
+              ((secondsRemaining - 1) / 60 / settings[mode]) * 100
+            );
+            return secondsRemaining - 1;
+          } else {
+            alert("Times up!");
+            clearInterval(intervalRef.current);
+            setStatus(STATUS.STOPPED);
 
-            if(mode === "pomoLength"){
-              setMode("shortBreak")
-              setPercentLeft(100)
-              return settings.shortBreak * 60
-            }
-            else if(mode === "shortBreak"){
-              setMode("longBreak")
-              setPercentLeft(100)
-              return settings.longBreak * 60
-            }
-            else{
-              setMode("pomoLength")
-              setPercentLeft(100)
-              return settings.pomoLength * 60
+            if (mode === "pomoLength") {
+              setMode("shortBreak");
+              setPercentLeft(100);
+              return settings.shortBreak * 60;
+            } else if (mode === "shortBreak") {
+              setMode("longBreak");
+              setPercentLeft(100);
+              return settings.longBreak * 60;
+            } else {
+              setMode("pomoLength");
+              setPercentLeft(100);
+              return settings.pomoLength * 60;
             }
           }
-          })
-      },1000)
+        });
+      }, 1000);
     }
     //pause the timer
-    else{
-      setStatus(STATUS.STOPPED)
-      clearInterval(intervalRef.current)
+    else {
+      setStatus(STATUS.STOPPED);
+      clearInterval(intervalRef.current);
     }
   }
 
-  function openSettings(){
-    if(settingsRef.current){
-      settingsRef.current.style.display = "block"
-      setSelectedFont(settings.font)
-      setSelectedColor(settings.color)
+  function openSettings() {
+    if (settingsRef.current) {
+      settingsRef.current.style.display = "block";
+      setSelectedFont(settings.font);
+      setSelectedColor(settings.color);
     }
   }
 
-  function manuallyChangeMode(newMode:string){
-    clearInterval(intervalRef.current)
-    setStatus(STATUS.STOPPED)
-    setSecondsRemaining(settings[newMode] * 60)
-    setMode(newMode)
-    setPercentLeft(100)
+  function manuallyChangeMode(newMode: string) {
+    clearInterval(intervalRef.current);
+    setStatus(STATUS.STOPPED);
+    setSecondsRemaining(settings[newMode] * 60);
+    setMode(newMode);
+    setPercentLeft(100);
   }
 
-  return (  
+  return (
     <>
-      <div className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}>
-        <h1 className='text-light-purple text-4xl m-auto mt-5 xl:text-5xl'>pomodoro</h1>
-        <Nav mode={mode} manuallyChangeMode={manuallyChangeMode} settings={settings} />
-        <Timer settings={settings} startPomo={startPomo} percentLeft={percentLeft} secondsRemaining={secondsRemaining} status={status} />
+      <div
+        className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}
+      >
+        <h1 className="text-light-purple text-4xl m-auto mt-5 xl:text-5xl">
+          pomodoro
+        </h1>
+        <Nav
+          mode={mode}
+          manuallyChangeMode={manuallyChangeMode}
+          settings={settings}
+        />
+        <Timer
+          settings={settings}
+          startPomo={startPomo}
+          percentLeft={percentLeft}
+          secondsRemaining={secondsRemaining}
+          status={status}
+        />
         <SettingsCogwheel openSettings={openSettings} />
       </div>
-      <div ref={settingsRef} className={`FULLPAGE hidden w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}>
-        <SettingsCard settingsRef={settingsRef} setSettings={setSettings} selectedFont={selectedFont} setSelectedFont={setSelectedFont} 
-        selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
+      <div
+        ref={settingsRef}
+        className={`FULLPAGE hidden w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}
+      >
+        <SettingsCard
+          settingsRef={settingsRef}
+          setSettings={setSettings}
+          selectedFont={selectedFont}
+          setSelectedFont={setSelectedFont}
+          selectedColor={selectedColor}
+          setSelectedColor={setSelectedColor}
+        />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
