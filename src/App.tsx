@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Nav } from "./components/Nav";
 import { SettingsCard } from "./components/SettingsCard";
 import { SettingsCogwheel } from "./components/SettingsCogwheel";
+import { Tasks } from "./components/Tasks";
 import { Timer } from "./components/Timer";
 
 export interface ISettings {
@@ -129,6 +130,9 @@ function App() {
           secondsRemaining={secondsRemaining}
           status={status}
         />
+
+        <Tasks />
+
         <SettingsCogwheel openSettings={openSettings} />
       </div>
       <div
