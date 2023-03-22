@@ -2,12 +2,19 @@
 
 // helper function to capitalize task titles (optional)
 // format long task titles
-// look at openTaskModal
 // style
+// make a settings context ?
 
 import { FormEvent, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { AddTaskModal } from "./AddTaskModal";
+
+const taskStyling = {
+  default:
+    "flex w-full justify-between  rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-transparent",
+  focused:
+    "flex w-full justify-between rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-green-400",
+};
 
 export const Tasks = () => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
@@ -36,7 +43,7 @@ export const Tasks = () => {
   ]);
 
   function openTaskModal() {
-    setShowTaskModal(!showTaskModal);
+    setShowTaskModal(true);
   }
 
   function addTask(e: FormEvent) {
@@ -76,7 +83,7 @@ export const Tasks = () => {
   return (
     <>
       <div className="mx-auto">
-        <h2 className="text-center text-slate-400">
+        <h2 className="text-center text-slate-400 h-4">
           {focusedTask && focusedTask.title}
         </h2>
         <img
@@ -88,13 +95,19 @@ export const Tasks = () => {
       </div>
       <ul
         onClick={focusTask}
-        className="border border-4 border-red-500 flex  flex-col gap-4 items-center justify-center text-slate-400"
+        className="flex flex-col gap-4 items-center justify-center text-slate-400"
       >
         {tasks.map((task) => {
           return (
             <li
               key={task.id}
-              className="flex w-full justify-between border p-4 cursor-pointer"
+              className={
+                focusedTask
+                  ? focusedTask.id === task.id
+                    ? taskStyling.focused
+                    : taskStyling.default
+                  : taskStyling.default
+              }
               data-id={task.id}
             >
               <p className="max-w-sm break-words">{task.title} </p>
