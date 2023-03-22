@@ -4,6 +4,7 @@
 // format long task titles
 // style
 // make a settings context ?
+// proper types
 
 import { FormEvent, useRef, useState } from "react";
 import { nanoid } from "nanoid";
@@ -16,10 +17,9 @@ const taskStyling = {
     "flex w-full justify-between rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-green-400",
 };
 
-export const Tasks = () => {
+export const Tasks = ({ focusedTask, setFocusedTask }: any) => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
   const estPomosRef = useRef<HTMLInputElement>(null);
-  const [focusedTask, setFocusedTask] = useState<any>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [tasks, setTasks] = useState([
     {

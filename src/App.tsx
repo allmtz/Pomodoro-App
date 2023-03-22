@@ -1,3 +1,6 @@
+//TODO
+// proper types
+
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Nav } from "./components/Nav";
@@ -48,6 +51,8 @@ function App() {
 
   const [mode, setMode] = useState("pomoLength");
 
+  const [focusedTask, setFocusedTask] = useState<any>(null);
+
   //reset clock when user changes settings
   useEffect(() => {
     setSecondsRemaining(settings.pomoLength * 60);
@@ -71,6 +76,9 @@ function App() {
             setStatus(STATUS.STOPPED);
 
             if (mode === "pomoLength") {
+              if (focusedTask) {
+                focusedTask.completedPomos += 1;
+              }
               setMode("shortBreak");
               setPercentLeft(100);
               return settings.shortBreak * 60;
@@ -131,7 +139,7 @@ function App() {
           status={status}
         />
 
-        <Tasks />
+        <Tasks focusedTask={focusedTask} setFocusedTask={setFocusedTask} />
 
         <SettingsCogwheel openSettings={openSettings} />
       </div>
