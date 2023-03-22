@@ -59,6 +59,8 @@ export const Tasks = () => {
 
     taskTitleRef.current!.value = "";
     estPomosRef.current!.value = "1";
+    setShowTaskModal(false);
+    setFocusedTask(newTask);
   }
 
   function focusTask(e: any) {
