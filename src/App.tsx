@@ -9,6 +9,34 @@ import { SettingsCogwheel } from "./components/SettingsCogwheel";
 import { Tasks } from "./components/Tasks";
 import { Timer } from "./components/Timer";
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { UserView } from "./components/UserView";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAgRsrcA7heoARZ-4NcJXdF0bqE757kPeI",
+  authDomain: "pomodoro-48216.firebaseapp.com",
+  projectId: "pomodoro-48216",
+  storageBucket: "pomodoro-48216.appspot.com",
+  messagingSenderId: "587005010419",
+  appId: "1:587005010419:web:5cbf5b5630644d14b0f286",
+  measurementId: "G-VMBKDEBSTG",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
+
 export interface ISettings {
   pomoLength: number;
   shortBreak: number;
@@ -47,11 +75,27 @@ function App() {
   const [secondsRemaining, setSecondsRemaining] = useState(2);
 
   const [status, setStatus] = useState(STATUS.STOPPED);
-  const intervalRef = useRef(0);
+  const intervalRef: any = useRef(0);
 
   const [mode, setMode] = useState("pomoLength");
 
   const [focusedTask, setFocusedTask] = useState<any>(null);
+
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userName, setUserName] = useState<string | null>("");
+
+  function signin() {
+    signInWithPopup(auth, provider).then((result) => {
+      setUserName(result.user.displayName);
+      setIsSignedIn(true);
+    });
+  }
+
+  function signout() {
+    auth.signOut();
+    setIsSignedIn(false);
+    setUserName("");
+  }
 
   //reset clock when user changes settings
   useEffect(() => {
@@ -126,6 +170,16 @@ function App() {
         <h1 className="text-light-purple text-4xl m-auto mt-5 xl:text-5xl">
           pomodoro
         </h1>
+
+        <div className="m-auto absolute top-5 right-20">
+          <UserView
+            signin={signin}
+            isSignedIn={isSignedIn}
+            userName={userName}
+            signout={signout}
+          />
+        </div>
+
         <Nav
           mode={mode}
           manuallyChangeMode={manuallyChangeMode}
