@@ -17,7 +17,7 @@ const taskStyling = {
     "flex w-full justify-between rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-green-400",
 };
 
-export const Tasks = ({ focusedTask, setFocusedTask }: any) => {
+export const Tasks = ({ focusedTask, setFocusedTask, children }: any) => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
   const estPomosRef = useRef<HTMLInputElement>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
@@ -84,14 +84,17 @@ export const Tasks = ({ focusedTask, setFocusedTask }: any) => {
     <>
       <div className="mx-auto">
         <h2 className="text-center text-slate-400 h-4">
-          {focusedTask && focusedTask.title}
+          {focusedTask ? focusedTask.title : "What's your focus?"}
         </h2>
-        <img
-          className="mx-auto mt-4 cursor-pointer"
-          src="./add.svg"
-          alt="add task"
-          onClick={openTaskModal}
-        />
+        <div className="mt-8 flex items-center gap-6 justify-center">
+          <img
+            className="cursor-pointer"
+            src="./add.svg"
+            alt="add task"
+            onClick={openTaskModal}
+          />
+          {children}
+        </div>
       </div>
       <ul
         onClick={focusTask}

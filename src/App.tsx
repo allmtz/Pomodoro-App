@@ -165,7 +165,7 @@ function App() {
   return (
     <>
       <div
-        className={`container font-${settings.font} flex flex-col justify-center align-center gap-10`}
+        className={`container font-${settings.font} flex flex-col justify-center align-center gap-10 pb-20`}
       >
         <h1 className="text-light-purple text-4xl m-auto mt-5 xl:text-5xl">
           pomodoro
@@ -193,9 +193,9 @@ function App() {
           status={status}
         />
 
-        <Tasks focusedTask={focusedTask} setFocusedTask={setFocusedTask} />
-
-        <SettingsCogwheel openSettings={openSettings} />
+        <Tasks focusedTask={focusedTask} setFocusedTask={setFocusedTask}>
+          <SettingsCogwheel openSettings={openSettings} />
+        </Tasks>
       </div>
       <div
         ref={settingsRef}
