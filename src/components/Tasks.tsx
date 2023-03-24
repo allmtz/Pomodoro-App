@@ -1,14 +1,20 @@
 // TODO
 
-// helper function to capitalize task titles (optional)
 // format long task titles
 // style
-// make a settings context ?
 // proper types
 
 import { FormEvent, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { AddTaskModal } from "./AddTaskModal";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
 
 const taskStyling = {
   default:
@@ -24,8 +30,6 @@ export const Tasks = ({
   setFocusedTask,
   children,
   db,
-  collection,
-  addDoc,
   auth,
 }: any) => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
@@ -87,19 +91,33 @@ export const Tasks = ({
     }
   }
 
-  function deleteTask(e: any) {
+  async function deleteTask(e: any) {
     const li = e.target.closest("li");
 
     if (li) {
       const taskId = li.dataset.id;
+
+      // filter out the clicked task from `tasks`
       const newTasks = tasks.filter((task: any) => task.taskId != taskId);
 
-      // re-set the focusedTask to null if user deletes the focusedTask
+      setTasks(newTasks);
       if (focusedTask && focusedTask.taskId === taskId) {
+        // re-set the focusedTask to null if user deletes the focusedTask
         setFocusedTask(null);
       }
 
-      setTasks(newTasks);
+      // if a user is signed in, delete the task document from db
+      if (auth.currentUser) {
+        const tasksRef = collection(db, "tasks");
+
+        const q = query(tasksRef, where("taskId", "==", `${taskId}`));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          deleteDoc(doc.ref);
+        });
+      }
     }
   }
 

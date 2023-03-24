@@ -19,7 +19,6 @@ import { UserView } from "./components/UserView";
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs,
   query,
   where,
@@ -92,7 +91,7 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>("");
 
-  const [tasks, setTasks] = useState([
+  const defaultTasks = [
     {
       title: "important thing ",
       estimatedPomos: 20,
@@ -114,7 +113,9 @@ function App() {
       taskId: nanoid(),
       dateCreated: new Date(),
     },
-  ]);
+  ];
+
+  const [tasks, setTasks] = useState(defaultTasks);
 
   async function signin() {
     const result = await signInWithPopup(auth, provider);
@@ -150,6 +151,7 @@ function App() {
     auth.signOut();
     setIsSignedIn(false);
     setUserName("");
+    setTasks(defaultTasks);
   }
 
   //reset clock when user changes settings
@@ -251,8 +253,6 @@ function App() {
             focusedTask={focusedTask}
             setFocusedTask={setFocusedTask}
             db={db}
-            collection={collection}
-            addDoc={addDoc}
             auth={auth}
           >
             <SettingsCogwheel openSettings={openSettings} />
