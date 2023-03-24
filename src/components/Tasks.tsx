@@ -17,36 +17,26 @@ const taskStyling = {
     "flex w-full justify-between rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-green-400",
 };
 
-export const Tasks = ({ focusedTask, setFocusedTask, children }: any) => {
+export const Tasks = ({
+  tasks,
+  setTasks,
+  focusedTask,
+  setFocusedTask,
+  children,
+  db,
+  collection,
+  addDoc,
+  auth,
+}: any) => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
   const estPomosRef = useRef<HTMLInputElement>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [tasks, setTasks] = useState([
-    {
-      title: "important thing ",
-      estimatedPomos: 20,
-      completedPomos: 0,
-      id: nanoid(),
-    },
-    {
-      title: "important stuff",
-      estimatedPomos: 5,
-      completedPomos: 0,
-      id: nanoid(),
-    },
-    {
-      title: "sss",
-      estimatedPomos: 2,
-      completedPomos: 0,
-      id: nanoid(),
-    },
-  ]);
 
   function openTaskModal() {
     setShowTaskModal(true);
   }
 
-  function addTask(e: FormEvent) {
+  async function addTask(e: FormEvent) {
     e.preventDefault();
 
     if (taskTitleRef.current?.value.trim() === "") {
@@ -58,16 +48,30 @@ export const Tasks = ({ focusedTask, setFocusedTask, children }: any) => {
       title: taskTitleRef.current!.value,
       estimatedPomos: Number(estPomosRef.current!.value),
       completedPomos: 0,
-      id: nanoid(),
+      taskId: nanoid(),
+      dateCreated: new Date(),
     };
 
     tasks.push(newTask);
-    setTasks((tasks) => [...tasks]);
+    setTasks((tasks: any) => [...tasks]);
 
     taskTitleRef.current!.value = "";
     estPomosRef.current!.value = "1";
     setShowTaskModal(false);
     setFocusedTask(newTask);
+
+    // if a user is signed in add the created task to the `tasks` collection
+    if (auth.currentUser) {
+      try {
+        const docRef = await addDoc(collection(db, "tasks"), {
+          ...newTask,
+          uid: auth.currentUser.uid,
+        });
+        // console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        // console.error("Error adding document: ", e);
+      }
+    }
   }
 
   function focusTask(e: any) {
@@ -76,7 +80,7 @@ export const Tasks = ({ focusedTask, setFocusedTask, children }: any) => {
     if (li) {
       const taskId = li.dataset.id;
 
-      setFocusedTask(tasks.find((task) => task.id === taskId));
+      setFocusedTask(tasks.find((task: any) => task.taskId === taskId));
     }
   }
 
@@ -100,18 +104,18 @@ export const Tasks = ({ focusedTask, setFocusedTask, children }: any) => {
         onClick={focusTask}
         className="flex flex-col gap-4 items-center justify-center text-slate-400"
       >
-        {tasks.map((task) => {
+        {tasks.map((task: any) => {
           return (
             <li
-              key={task.id}
+              key={task.taskId}
               className={
                 focusedTask
-                  ? focusedTask.id === task.id
+                  ? focusedTask.taskId === task.taskId
                     ? taskStyling.focused
                     : taskStyling.default
                   : taskStyling.default
               }
-              data-id={task.id}
+              data-id={task.taskId}
             >
               <p className="max-w-sm break-words">{task.title} </p>
               <p>
