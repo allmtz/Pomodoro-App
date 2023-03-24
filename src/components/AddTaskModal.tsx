@@ -26,7 +26,7 @@ export const AddTaskModal = ({
         <input
           className="bg-off-white border rounded-md outline-none p-1 "
           type="number"
-          min="0"
+          min="1"
           step="1"
           defaultValue="1"
           id="estimated-pomos"
