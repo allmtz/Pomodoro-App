@@ -22,6 +22,8 @@ import {
   getDocs,
   query,
   where,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 
 import { SettingsContext } from "./contexts/SettingsContext";
@@ -179,6 +181,30 @@ function App() {
             if (mode === "pomoLength") {
               if (focusedTask) {
                 focusedTask.completedPomos += 1;
+
+                // if a user is signed in, update doc in firestore
+                if (auth.currentUser) {
+                  const tasksRef = collection(db, "tasks");
+
+                  async function updateDocs() {
+                    const q = query(
+                      tasksRef,
+                      where("taskId", "==", `${focusedTask.taskId}`)
+                    );
+
+                    const querySnapshot = await getDocs(q);
+
+                    querySnapshot.forEach(async (document) => {
+                      const docRef = doc(db, "tasks", document.id);
+
+                      await updateDoc(docRef, {
+                        completedPomos: focusedTask.completedPomos,
+                      });
+                    });
+                  }
+
+                  updateDocs();
+                }
               }
               setMode("shortBreak");
               setPercentLeft(100);
