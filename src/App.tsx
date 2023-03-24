@@ -238,7 +238,7 @@ function App() {
           pomodoro
         </h1>
 
-        <div className="m-auto absolute top-5 right-20">
+        <div className="m-auto md:absolute top-5 right-20 ">
           <UserView
             signin={signin}
             isSignedIn={isSignedIn}

@@ -75,12 +75,31 @@ export const Tasks = ({
   }
 
   function focusTask(e: any) {
+    // do nothing if the user clicks on the delete button
+    if (e.target.className.includes("delete-btn")) return;
+
     const li = e.target.closest("li");
 
     if (li) {
       const taskId = li.dataset.id;
 
       setFocusedTask(tasks.find((task: any) => task.taskId === taskId));
+    }
+  }
+
+  function deleteTask(e: any) {
+    const li = e.target.closest("li");
+
+    if (li) {
+      const taskId = li.dataset.id;
+      const newTasks = tasks.filter((task: any) => task.taskId != taskId);
+
+      // re-set the focusedTask to null if user deletes the focusedTask
+      if (focusedTask && focusedTask.taskId === taskId) {
+        setFocusedTask(null);
+      }
+
+      setTasks(newTasks);
     }
   }
 
@@ -118,9 +137,17 @@ export const Tasks = ({
               data-id={task.taskId}
             >
               <p className="max-w-sm break-words">{task.title} </p>
-              <p>
-                {task.completedPomos} / {task.estimatedPomos}
-              </p>
+              <div className="flex gap-4">
+                <p>
+                  {task.completedPomos} / {task.estimatedPomos}
+                </p>
+                <p
+                  className="delete-btn cursor-pointer p-[2px] hover:text-red-400"
+                  onClick={deleteTask}
+                >
+                  X
+                </p>
+              </div>
             </li>
           );
         })}
