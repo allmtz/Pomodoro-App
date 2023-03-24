@@ -125,7 +125,7 @@ export const Tasks = ({
     <>
       <div className="mx-auto">
         <h2 className="text-center text-slate-400 h-4">
-          {focusedTask ? focusedTask.title : "What's your focus?"}
+          {focusedTask ? focusedTask.title : "What are you focusing on?"}
         </h2>
         <div className="mt-8 flex items-center gap-6 justify-center">
           <img
