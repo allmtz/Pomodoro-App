@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { ISettings } from "../App";
 import { ColorOption } from "./ColorOption";
 import { DurationSelector } from "./DurationSelector";
+import { Settings } from "../types";
 
 interface ISettingsCardProps {
   settingsRef: React.RefObject<HTMLDivElement>;
-  setSettings: React.Dispatch<ISettings>;
+  setSettings: React.Dispatch<Settings>;
   selectedFont: string;
   setSelectedFont: React.Dispatch<React.SetStateAction<string>>;
   selectedColor: string;

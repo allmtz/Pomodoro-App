@@ -25,6 +25,10 @@ import {
   where,
 } from "firebase/firestore";
 
+import { SettingsContext } from "./contexts/SettingsContext";
+
+import { Task } from "./types";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,22 +52,6 @@ const db = getFirestore(app);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
-
-export interface ISettings {
-  pomoLength: number;
-  shortBreak: number;
-  longBreak: number;
-  font: string;
-  color: string;
-}
-
-type Task = {
-  title: string;
-  estimatedPomos: number;
-  completedPomos: number;
-  taskId: string;
-  dateCreated: Date;
-};
 
 const STATUS = {
   STARTED: "started",
@@ -231,61 +219,59 @@ function App() {
 
   return (
     <>
-      <div
-        className={`container font-${settings.font} flex flex-col justify-center align-center gap-10 pb-20`}
-      >
-        <h1 className="text-light-purple text-4xl m-auto mt-5 xl:text-5xl">
-          pomodoro
-        </h1>
+      <SettingsContext.Provider value={settings}>
+        <div
+          className={`container font-${settings.font} flex flex-col justify-center align-center gap-10 pb-20`}
+        >
+          <h1 className="text-light-purple text-4xl m-auto mt-5 xl:text-5xl">
+            pomodoro
+          </h1>
 
-        <div className="m-auto md:absolute top-5 right-20 ">
-          <UserView
-            signin={signin}
-            isSignedIn={isSignedIn}
-            userName={userName}
-            signout={signout}
+          <div className="m-auto md:absolute top-5 right-20 ">
+            <UserView
+              signin={signin}
+              isSignedIn={isSignedIn}
+              userName={userName}
+              signout={signout}
+            />
+          </div>
+
+          <Nav mode={mode} manuallyChangeMode={manuallyChangeMode} />
+
+          <Timer
+            startPomo={startPomo}
+            percentLeft={percentLeft}
+            secondsRemaining={secondsRemaining}
+            status={status}
+          />
+
+          <Tasks
+            tasks={tasks}
+            setTasks={setTasks}
+            focusedTask={focusedTask}
+            setFocusedTask={setFocusedTask}
+            db={db}
+            collection={collection}
+            addDoc={addDoc}
+            auth={auth}
+          >
+            <SettingsCogwheel openSettings={openSettings} />
+          </Tasks>
+        </div>
+        <div
+          ref={settingsRef}
+          className={`FULLPAGE hidden w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}
+        >
+          <SettingsCard
+            settingsRef={settingsRef}
+            setSettings={setSettings}
+            selectedFont={selectedFont}
+            setSelectedFont={setSelectedFont}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
           />
         </div>
-
-        <Nav
-          mode={mode}
-          manuallyChangeMode={manuallyChangeMode}
-          settings={settings}
-        />
-        <Timer
-          settings={settings}
-          startPomo={startPomo}
-          percentLeft={percentLeft}
-          secondsRemaining={secondsRemaining}
-          status={status}
-        />
-
-        <Tasks
-          tasks={tasks}
-          setTasks={setTasks}
-          focusedTask={focusedTask}
-          setFocusedTask={setFocusedTask}
-          db={db}
-          collection={collection}
-          addDoc={addDoc}
-          auth={auth}
-        >
-          <SettingsCogwheel openSettings={openSettings} />
-        </Tasks>
-      </div>
-      <div
-        ref={settingsRef}
-        className={`FULLPAGE hidden w-full h-full fixed top-0 right-0 p-4 bg-grayed-out`}
-      >
-        <SettingsCard
-          settingsRef={settingsRef}
-          setSettings={setSettings}
-          selectedFont={selectedFont}
-          setSelectedFont={setSelectedFont}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-        />
-      </div>
+      </SettingsContext.Provider>
     </>
   );
 }

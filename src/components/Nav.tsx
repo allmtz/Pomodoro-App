@@ -1,15 +1,17 @@
-import { ISettings } from "../App";
+import { useContext } from "react";
+import { SettingsContext } from "../contexts/SettingsContext";
 import { IColorVariants } from "./ColorOption";
 
 interface INavProps {
   mode: string;
   manuallyChangeMode: Function;
-  settings: ISettings;
 }
 
 const defaultStyling = "cursor-pointer p-4 text-center";
 
-export const Nav = ({ mode, manuallyChangeMode, settings }: INavProps) => {
+export const Nav = ({ mode, manuallyChangeMode }: INavProps) => {
+  const settings = useContext(SettingsContext);
+
   const colorOptions: IColorVariants = {
     hl: "bg-hl p-4 rounded-full text-dark-bg text-center cursor-pointer duration-700",
     teal: "bg-teal p-4 rounded-full text-dark-bg text-center cursor-pointer duration-700",
@@ -23,7 +25,7 @@ export const Nav = ({ mode, manuallyChangeMode, settings }: INavProps) => {
         <li
           className={
             mode === "pomoLength"
-              ? colorOptions[settings.color as keyof IColorVariants]
+              ? colorOptions[settings!.color as keyof IColorVariants]
               : defaultStyling
           }
           onClick={() => manuallyChangeMode("pomoLength")}
@@ -33,7 +35,7 @@ export const Nav = ({ mode, manuallyChangeMode, settings }: INavProps) => {
         <li
           className={
             mode === "shortBreak"
-              ? colorOptions[settings.color as keyof IColorVariants]
+              ? colorOptions[settings!.color as keyof IColorVariants]
               : defaultStyling
           }
           onClick={() => manuallyChangeMode("shortBreak")}
@@ -43,7 +45,7 @@ export const Nav = ({ mode, manuallyChangeMode, settings }: INavProps) => {
         <li
           className={
             mode === "longBreak"
-              ? colorOptions[settings.color as keyof IColorVariants]
+              ? colorOptions[settings!.color as keyof IColorVariants]
               : defaultStyling
           }
           onClick={() => manuallyChangeMode("longBreak")}

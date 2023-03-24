@@ -1,13 +1,15 @@
+import { useContext } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { ISettings } from "../App";
+import { SettingsContext } from "../contexts/SettingsContext";
 
 interface IProgressProps {
   percentLeft: number;
-  settings: ISettings;
 }
 
-export const ProgressBar = ({ percentLeft, settings }: IProgressProps) => {
+export const ProgressBar = ({ percentLeft }: IProgressProps) => {
+  const settings = useContext(SettingsContext);
+
   return (
     <div className="absolute w-[280px] h-[280px] xl:w-[440px] xl:h-[440px]">
       <CircularProgressbar
@@ -15,9 +17,9 @@ export const ProgressBar = ({ percentLeft, settings }: IProgressProps) => {
         strokeWidth={3}
         styles={buildStyles({
           pathColor: `${
-            settings.color === "hl"
+            settings!.color === "hl"
               ? "#f87070"
-              : settings.color === "teal"
+              : settings!.color === "teal"
               ? "#70f3f8"
               : "#d881f8"
           }`,

@@ -1,8 +1,8 @@
 import { ProgressBar } from "./ProgressBar";
-import { ISettings } from "../App";
+import { useContext } from "react";
+import { SettingsContext } from "../contexts/SettingsContext";
 
 interface ITimer {
-  settings: ISettings;
   startPomo: React.MouseEventHandler;
   percentLeft: number;
   secondsRemaining: number;
@@ -20,21 +20,24 @@ function getSeconds(seconds: number) {
 }
 
 export const Timer = ({
-  settings,
   startPomo,
   percentLeft,
   secondsRemaining,
   status,
 }: ITimer) => {
+  const settings = useContext(SettingsContext);
+
   return (
     <main
-      className={`relative font-${settings.font} flex justify-center items-center text-off-white  
+      className={`relative font-${
+        settings!.font
+      } flex justify-center items-center text-off-white  
             w-[340px] h-[340px] rounded-full m-auto cursor-pointer bg-gradient-to-br from-dark-bg to-lighter-bg shadow-2xl
             xl:w-[500px] xl:h-[500px]`}
       onClick={startPomo}
     >
       <div className="flex flex-col justify-center rounded-full bg-dark-bg items-center h-[305px] w-[305px] xl:h-[465px] xl:w-[465px]">
-        <ProgressBar percentLeft={percentLeft} settings={settings} />
+        <ProgressBar percentLeft={percentLeft} />
         <p className="text-7xl font-bold xl:text-8xl">
           {`${getMinutes(secondsRemaining)}:${getSeconds(secondsRemaining)}`}
         </p>
