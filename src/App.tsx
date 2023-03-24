@@ -1,6 +1,8 @@
 //TODO
 // proper types
 
+import { nanoid } from "nanoid";
+
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Nav } from "./components/Nav";
@@ -14,6 +16,15 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { UserView } from "./components/UserView";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,6 +43,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth();
@@ -44,6 +56,14 @@ export interface ISettings {
   font: string;
   color: string;
 }
+
+type Task = {
+  title: string;
+  estimatedPomos: number;
+  completedPomos: number;
+  taskId: string;
+  dateCreated: Date;
+};
 
 const STATUS = {
   STARTED: "started",
@@ -84,11 +104,58 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>("");
 
-  function signin() {
-    signInWithPopup(auth, provider).then((result) => {
-      setUserName(result.user.displayName);
-      setIsSignedIn(true);
+  const [tasks, setTasks] = useState([
+    {
+      title: "important thing ",
+      estimatedPomos: 20,
+      completedPomos: 0,
+      taskId: nanoid(),
+      dateCreated: new Date(),
+    },
+    {
+      title: "important stuff",
+      estimatedPomos: 5,
+      completedPomos: 0,
+      taskId: nanoid(),
+      dateCreated: new Date(),
+    },
+    {
+      title: "important task",
+      estimatedPomos: 2,
+      completedPomos: 0,
+      taskId: nanoid(),
+      dateCreated: new Date(),
+    },
+  ]);
+
+  async function signin() {
+    const result = await signInWithPopup(auth, provider);
+
+    setUserName(result.user.displayName);
+    setIsSignedIn(true);
+
+    // try to load any existing tasks saved to the user:
+    const savedTasks: Task[] = [];
+
+    // create a reference to the `tasks` collection
+    const tasksRef = collection(db, "tasks");
+    // create a query
+    const q = query(tasksRef, where("uid", "==", `${result.user.uid}`));
+
+    // execute the query
+    const querySnapshot = await getDocs(q);
+
+    // loop through query results and push each result to `savedTasks`
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      // console.log(doc.id, " => ", doc.data()); // docs matched by the query
+      savedTasks.push(doc.data() as Task);
     });
+
+    // if the user had existing tasks, overwrite the default tasks
+    if (savedTasks.length > 0) {
+      setTasks(savedTasks);
+    }
   }
 
   function signout() {
@@ -193,7 +260,16 @@ function App() {
           status={status}
         />
 
-        <Tasks focusedTask={focusedTask} setFocusedTask={setFocusedTask}>
+        <Tasks
+          tasks={tasks}
+          setTasks={setTasks}
+          focusedTask={focusedTask}
+          setFocusedTask={setFocusedTask}
+          db={db}
+          collection={collection}
+          addDoc={addDoc}
+          auth={auth}
+        >
           <SettingsCogwheel openSettings={openSettings} />
         </Tasks>
       </div>
