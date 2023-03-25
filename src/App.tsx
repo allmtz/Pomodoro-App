@@ -189,6 +189,7 @@ function App() {
                   async function updateDocs() {
                     const q = query(
                       tasksRef,
+                      where("uid", "==", `${auth.currentUser?.uid}`),
                       where("taskId", "==", `${focusedTask.taskId}`)
                     );
 

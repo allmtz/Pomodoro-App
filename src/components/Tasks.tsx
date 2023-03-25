@@ -110,7 +110,11 @@ export const Tasks = ({
       if (auth.currentUser) {
         const tasksRef = collection(db, "tasks");
 
-        const q = query(tasksRef, where("taskId", "==", `${taskId}`));
+        const q = query(
+          tasksRef,
+          where("uid", "==", `${auth.currentUser?.uid}`),
+          where("taskId", "==", `${taskId}`)
+        );
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
