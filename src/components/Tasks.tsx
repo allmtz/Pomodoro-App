@@ -1,10 +1,8 @@
 // TODO
-
 // format long task titles
 // style
-// proper types
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, ReactNode, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { AddTaskModal } from "./AddTaskModal";
 import {
@@ -14,13 +12,26 @@ import {
   query,
   where,
   deleteDoc,
+  Firestore,
 } from "firebase/firestore";
+import { Task } from "../types";
+import { Auth } from "firebase/auth";
 
 const taskStyling = {
   default:
     "flex w-full justify-between  rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-transparent",
   focused:
     "flex w-full justify-between rounded-md bg-dark-bg p-4 cursor-pointer border-l-4 border-green-400",
+};
+
+type TasksProps = {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  focusedTask: Task | null;
+  setFocusedTask: React.Dispatch<React.SetStateAction<Task | null>>;
+  children: ReactNode;
+  db: Firestore;
+  auth: Auth;
 };
 
 export const Tasks = ({
@@ -31,7 +42,7 @@ export const Tasks = ({
   children,
   db,
   auth,
-}: any) => {
+}: TasksProps) => {
   const taskTitleRef = useRef<HTMLInputElement>(null);
   const estPomosRef = useRef<HTMLInputElement>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
@@ -57,7 +68,7 @@ export const Tasks = ({
     };
 
     tasks.push(newTask);
-    setTasks((tasks: any) => [...tasks]);
+    setTasks((tasks) => [...tasks]);
 
     taskTitleRef.current!.value = "";
     estPomosRef.current!.value = "1";
@@ -78,27 +89,33 @@ export const Tasks = ({
     }
   }
 
-  function focusTask(e: any) {
-    // do nothing if the user clicks on the delete button
-    if (e.target.className.includes("delete-btn")) return;
+  function focusTask(e: React.MouseEvent<HTMLElement>) {
+    const target = e.target as HTMLElement;
 
-    const li = e.target.closest("li");
+    // do nothing if the user clicks on the delete button
+    if (target.className.includes("delete-btn")) return;
+
+    const li = target.closest("li");
 
     if (li) {
       const taskId = li.dataset.id;
 
-      setFocusedTask(tasks.find((task: any) => task.taskId === taskId));
+      const match = tasks.find((task) => task.taskId === taskId);
+
+      if (match) setFocusedTask(match);
     }
   }
 
-  async function deleteTask(e: any) {
-    const li = e.target.closest("li");
+  async function deleteTask(e: React.MouseEvent<HTMLElement>) {
+    const target = e.target as HTMLElement;
+
+    const li = target.closest("li");
 
     if (li) {
       const taskId = li.dataset.id;
 
       // filter out the clicked task from `tasks`
-      const newTasks = tasks.filter((task: any) => task.taskId != taskId);
+      const newTasks = tasks.filter((task) => task.taskId != taskId);
 
       setTasks(newTasks);
       if (focusedTask && focusedTask.taskId === taskId) {
@@ -110,7 +127,11 @@ export const Tasks = ({
       if (auth.currentUser) {
         const tasksRef = collection(db, "tasks");
 
-        const q = query(tasksRef, where("taskId", "==", `${taskId}`));
+        const q = query(
+          tasksRef,
+          where("uid", "==", `${auth.currentUser?.uid}`),
+          where("taskId", "==", `${taskId}`)
+        );
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
@@ -141,7 +162,7 @@ export const Tasks = ({
         onClick={focusTask}
         className="flex flex-col gap-4 items-center justify-center text-slate-400"
       >
-        {tasks.map((task: any) => {
+        {tasks.map((task) => {
           return (
             <li
               key={task.taskId}

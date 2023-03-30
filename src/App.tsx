@@ -1,9 +1,6 @@
-//TODO
-// proper types
-
 import { nanoid } from "nanoid";
 
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Nav } from "./components/Nav";
 import { SettingsCard } from "./components/SettingsCard";
@@ -84,11 +81,11 @@ function App() {
   const [secondsRemaining, setSecondsRemaining] = useState(2);
 
   const [status, setStatus] = useState(STATUS.STOPPED);
-  const intervalRef: any = useRef(0);
+  const intervalRef: MutableRefObject<number | NodeJS.Timer> = useRef(0);
 
   const [mode, setMode] = useState("pomoLength");
 
-  const [focusedTask, setFocusedTask] = useState<any>(null);
+  const [focusedTask, setFocusedTask] = useState<Task | null>(null);
 
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>("");
@@ -117,7 +114,7 @@ function App() {
     },
   ];
 
-  const [tasks, setTasks] = useState(defaultTasks);
+  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
 
   async function signin() {
     const result = await signInWithPopup(auth, provider);
@@ -189,7 +186,8 @@ function App() {
                   async function updateDocs() {
                     const q = query(
                       tasksRef,
-                      where("taskId", "==", `${focusedTask.taskId}`)
+                      where("uid", "==", `${auth.currentUser?.uid}`),
+                      where("taskId", "==", `${focusedTask!.taskId}`)
                     );
 
                     const querySnapshot = await getDocs(q);
@@ -198,7 +196,7 @@ function App() {
                       const docRef = doc(db, "tasks", document.id);
 
                       await updateDoc(docRef, {
-                        completedPomos: focusedTask.completedPomos,
+                        completedPomos: focusedTask!.completedPomos,
                       });
                     });
                   }
