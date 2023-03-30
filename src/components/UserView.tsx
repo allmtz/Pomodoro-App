@@ -29,7 +29,7 @@ export const UserView = ({
             className="border p-2 bg-light-purple rounded-md cursor-pointer"
             onClick={signin}
           >
-            Sign in with Google
+            Log In with Google
           </p>
         </div>
       )}
